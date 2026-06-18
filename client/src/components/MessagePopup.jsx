@@ -1,109 +1,62 @@
 import { useState } from "react";
 import API from "../services/api";
 
-function MessagePopup(){
+function MessagePopup({ onClose }) {
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [message,setMessage] = useState("");
-
-  const [loading,setLoading] = useState(false);
-
-
-  const sendResponse = async()=>{
-
-    try{
+  const saveMessage = async () => {
+    try {
+      if (!message.trim()) {
+        alert("Please message likho ❤️");
+        return;
+      }
 
       setLoading(true);
 
-
-      const res = await API.post("/respond",{
-
-        action:"accepted",
-
-        message:message
-
+      await API.post("/respond", {
+        action: "accepted",
+        message: message.trim(),
       });
 
-
-      console.log(res.data);
-
-
-      alert("❤️ Message Sent");
-
+      alert("send message to ritesh");
 
       setMessage("");
 
-
-    }
-    catch(error){
-
-      console.log("SEND ERROR:",error);
+      if (onClose) {
+        onClose();
+      }
+    } catch (error) {
+      console.log(error);
 
       alert("Message failed");
-
-    }
-    finally{
-
+    } finally {
       setLoading(false);
-
     }
+  };
 
-  }
+  return (
+    <div className="message-popup">
+      <h2>💌 Bhoomi ka Message</h2>
 
+      <textarea
+        placeholder="sun chomu tujhe bhi agar mrko koi gaali deni hai toh woh yaha likhkar bhej de😅"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
 
+      <button
+        onClick={saveMessage}
+        disabled={loading}
+      >
+        {loading ? "Sending..." : "Send Message ❤️"}
+      </button>
 
-return (
-
-<div className="message-popup">
-
-
-<h2>
-💌 Bhoomi ka Message
-</h2>
-
-
-<textarea
-
-placeholder="Bhoomi apna message likho..."
-
-value={message}
-
-onChange={(e)=>setMessage(e.target.value)}
-
-/>
-
-
-
-<button
-
-onClick={sendResponse}
-
-disabled={loading}
-
->
-
-{
-
-loading
-
-?
-
-"Sending..."
-
-:
-
-"Send Message ❤️"
-
+      <button onClick={onClose}>
+        Close ❌
+      </button>
+    </div>
+  );
 }
-
-
-</button>
-
-
-</div>
-
-);
-
-}
-
 
 export default MessagePopup;
