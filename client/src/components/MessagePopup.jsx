@@ -1,62 +1,109 @@
 import { useState } from "react";
 import API from "../services/api";
 
-function MessagePopup({ onClose }) {
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+function MessagePopup(){
 
-  const saveMessage = async () => {
-    try {
-      if (!message.trim()) {
-        alert("Please message likho ❤️");
-        return;
-      }
+  const [message,setMessage] = useState("");
+
+  const [loading,setLoading] = useState(false);
+
+
+  const sendResponse = async()=>{
+
+    try{
 
       setLoading(true);
 
-      const res = await API.post("/respond", {
-        action: "accepted",
-        message,
+
+      const res = await API.post("/respond",{
+
+        action:"accepted",
+
+        message:message
+
       });
 
-      if (res.data.success) {
-        alert("Message sent to ritesh");
 
-        setMessage("");
+      console.log(res.data);
 
-        if (onClose) {
-          onClose();
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      alert("Message send failed");
-    } finally {
-      setLoading(false);
+
+      alert("❤️ Message Sent");
+
+
+      setMessage("");
+
+
     }
-  };
+    catch(error){
 
-  return (
-    <div className="message-popup">
-      <h2>💌 Bhoomi ka Message</h2>
+      console.log("SEND ERROR:",error);
 
-      <textarea
-        placeholder="Bhoomi tujhe bhi jo gaali deni hai woh yaha de😅"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        rows={5}
-      />
+      alert("Message failed");
 
-      <button
-        onClick={saveMessage}
-        disabled={loading}
-      >
-        {loading
-          ? "Sending..."
-          : "❤️ Send Message"}
-      </button>
-    </div>
-  );
+    }
+    finally{
+
+      setLoading(false);
+
+    }
+
+  }
+
+
+
+return (
+
+<div className="message-popup">
+
+
+<h2>
+💌 Bhoomi ka Message
+</h2>
+
+
+<textarea
+
+placeholder="Bhoomi apna message likho..."
+
+value={message}
+
+onChange={(e)=>setMessage(e.target.value)}
+
+/>
+
+
+
+<button
+
+onClick={sendResponse}
+
+disabled={loading}
+
+>
+
+{
+
+loading
+
+?
+
+"Sending..."
+
+:
+
+"Send Message ❤️"
+
 }
+
+
+</button>
+
+
+</div>
+
+);
+
+}
+
 
 export default MessagePopup;
