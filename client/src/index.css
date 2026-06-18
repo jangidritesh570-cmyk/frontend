@@ -1,0 +1,309 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html, body{
+  height:100%;
+}
+
+body{
+  font-family:Inter,sans-serif;
+  min-height:100dvh;
+  overflow-x:hidden;
+
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+
+  background:linear-gradient(-45deg,#ff9a9e,#fad0c4,#fbc2eb,#a18cd1);
+  background-size:400% 400%;
+  animation:bgMove 10s ease infinite;
+
+  padding-bottom:0; /* ✅ FIX EXTRA BOTTOM SPACE */
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* ---------------- HOME PAGE ---------------- */
+
+.home-page{
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  padding:16px;
+  padding-bottom:16px; /* ✅ FIX */
+}
+
+/* CARD */
+.apology-card{
+  width:min(95%,650px);
+
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.2);
+  border:1px solid rgba(255,255,255,0.3);
+
+  border-radius:22px;
+
+  padding:clamp(16px,4vw,32px);
+  text-align:center;
+
+  box-shadow:0 8px 32px rgba(0,0,0,0.2);
+
+  color:black;
+
+  margin:0 auto; /* ✅ FIX CENTERING */
+}
+
+.apology-card h1{
+  margin-bottom:12px;
+  font-size:clamp(1.3rem,4vw,2.2rem);
+}
+
+.apology-card p{
+  margin:8px 0;
+  line-height:1.6;
+  font-size:clamp(0.9rem,2.5vw,1.05rem);
+}
+
+.apology-card h3{
+  margin-top:14px;
+}
+
+/* BUTTONS */
+.btn-container{
+  margin-top:16px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.accept-btn,
+.reject-btn{
+  border:none;
+  padding:12px 18px;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:1rem;
+  transition:0.25s;
+  min-width:120px;
+}
+
+.accept-btn{
+  background:white;
+}
+
+.reject-btn{
+  background:#ff4d6d;
+  color:black;
+}
+
+.accept-btn:hover,
+.reject-btn:hover{
+  transform:translateY(-3px) scale(1.02);
+}
+
+/* MESSAGE */
+.success-msg{
+  width:100%;
+  margin-top:12px;
+  color:black;
+  font-size:0.9rem;
+}
+
+/* FLOATING HEART */
+.heart{
+  position:fixed;
+  bottom:-30px;
+  animation:floatHeart 8s linear infinite;
+  font-size:18px;
+  z-index:-1;
+}
+
+@keyframes floatHeart{
+  0%{transform:translateY(0) rotate(0);opacity:1;}
+  100%{transform:translateY(-110vh) rotate(360deg);opacity:0;}
+}
+
+/* ---------------- ADMIN PAGE ---------------- */
+
+.admin-page{
+  min-height:100dvh;
+  padding:16px;
+}
+
+.admin-page h1{
+  text-align:center;
+  color:white;
+  margin-bottom:16px;
+  font-size:clamp(1.3rem,4vw,2rem);
+}
+
+/* GRID */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+  margin-bottom:18px;
+}
+
+/* CARD */
+.stat-card{
+  background:rgba(255,255,255,0.2);
+  backdrop-filter:blur(20px);
+  border-radius:16px;
+  padding:16px;
+  text-align:center;
+  color:white;
+}
+
+.stat-card h2{
+  font-size:clamp(1.4rem,5vw,2.3rem);
+}
+
+/* RESPONSES */
+.response-list{
+  display:grid;
+  gap:10px;
+}
+
+.response-card{
+  background:rgba(255,255,255,0.2);
+  backdrop-filter:blur(20px);
+  border-radius:16px;
+  padding:14px;
+  color:white;
+  word-break:break-word;
+}
+
+/* ---------------- POPUP ---------------- */
+
+.message-popup{
+  margin-top:14px;
+  width:min(95%,500px);
+  background:rgba(255,255,255,0.2);
+  backdrop-filter:blur(20px);
+  border-radius:16px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.message-popup h2{
+  color:white;
+  text-align:center;
+  font-size:1.1rem;
+}
+
+.message-popup textarea{
+  min-height:100px;
+  resize:none;
+  border:none;
+  border-radius:12px;
+  padding:12px;
+  outline:none;
+  font-size:1rem;
+}
+
+.message-popup button{
+  border:none;
+  padding:12px;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:1rem;
+}
+
+/* ---------------- MOBILE FIXES ---------------- */
+
+@media (max-width:768px){
+
+  .btn-container{
+    flex-direction:column;
+  }
+
+  .accept-btn,
+  .reject-btn{
+    width:100%;
+  }
+
+  .apology-card{
+    border-radius:18px;
+  }
+}
+
+@media (max-width:480px){
+
+  body{
+    background-size:300% 300%;
+  }
+
+  .heart{
+    font-size:14px;
+  }
+
+  .apology-card{
+    padding:14px;
+  }
+}
+
+@media (max-width:320px){
+
+  .apology-card{
+    padding:12px;
+  }
+
+  .accept-btn,
+  .reject-btn{
+    font-size:0.85rem;
+    padding:10px;
+  }
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.sorry-image{
+
+width:180px;
+
+height:180px;
+
+object-fit:cover;
+
+border-radius:20px;
+
+cursor:pointer;
+
+
+box-shadow:
+
+0 10px 30px
+
+rgba(0,0,0,.15);
+
+
+transition:.3s;
+
+}
+
+
+.sorry-image:hover{
+
+transform:
+
+scale(1.05);
+
+
+}
