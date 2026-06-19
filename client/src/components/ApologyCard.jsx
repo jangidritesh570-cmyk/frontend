@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import API from "../services/api";
+import MessagePopup from "./MessagePopup";
 
 function ApologyCard() {
   const [password, setPassword] = useState("");
   const [unlocked, setUnlocked] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
 
   const correctPassword = "bhoomi123";
 
@@ -19,25 +23,42 @@ function ApologyCard() {
     }
   };
 
-  const sendResponse = async (action) => {
+  const handleAccept = async () => {
     try {
       setLoading(true);
 
       await API.post("/response", {
-        action,
-        message:
-          action === "accepted"
-            ? "Bhoomi accepted apology ❤️"
-            : "Bhoomi rejected apology 😢",
+        action: "accepted",
+        message: "Bhoomi accepted apology ❤️",
       });
 
-      alert(
-        action === "accepted"
-          ? "❤️ Message Sent: Accepted"
-          : "😢 Message Sent: Not Accepted"
-      );
+      // 🔥 OPEN POPUP AFTER SUCCESS
+      setPopupMessage("❤️ Message Sent Successfully!");
+      setPopupOpen(true);
+
     } catch (err) {
-      alert("Failed to send message");
+      setPopupMessage("❌ Failed to send message");
+      setPopupOpen(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      setLoading(true);
+
+      await API.post("/response", {
+        action: "rejected",
+        message: "Bhoomi rejected apology 😢",
+      });
+
+      setPopupMessage("😢 Response Sent");
+      setPopupOpen(true);
+
+    } catch (err) {
+      setPopupMessage("❌ Failed to send message");
+      setPopupOpen(true);
     } finally {
       setLoading(false);
     }
@@ -46,14 +67,13 @@ function ApologyCard() {
   return (
     <div className="apology-wrapper">
 
-      {/* 🔐 LOCK SCREEN */}
+      {/* 🔐 LOCK */}
       {!unlocked && (
         <div className="lock-panel">
-          <h2>🔐 Enter Password to Open Apology</h2>
+          <h2>🔐 Enter Password</h2>
 
           <input
             type="password"
-            placeholder="Enter password..."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -64,50 +84,44 @@ function ApologyCard() {
         </div>
       )}
 
-      {/* 💌 APOLOGY CONTENT */}
+      {/* 💌 CARD */}
       {unlocked && (
-        <motion.div
-          className="apology-card"
-          animate={{ y: [0, -10, 0] }}
-          transition={{ repeat: Infinity, duration: 3 }}
-        >
+        <motion.div className="apology-card">
           <h2>🥺 Sorry yrr behan maaf krde please 🥺</h2>
 
-          <p>
-            are yrr behan maine faltu hi uss din tujhe naraj kr diya sorry
-          </p>
+          <p>...your messages...</p>
 
-          <p>
-            ab yrr aise kregi kya tu bhai se naraj hogi naah naah mujhse naraj mt ho
-            chomu 😂
-          </p>
+          <h4>your one & only chomu bhai ❤️</h4>
 
-          <p>
-            maine pehli baar fullstack project banaya hai sirf tujhe manane ke liye 😭
-          </p>
-
-          <h4>your one & only chomu bhai ki trf se sorry</h4>
-
-          {/* 🔥 BUTTONS (NOW INSIDE MESSAGE) */}
-          <div className="button-group">
+          {/* 🔥 ONLY ONE BUTTON GROUP (INSIDE CARD) */}
+          <div className="btn-container">
             <button
               className="accept-btn"
               disabled={loading}
-              onClick={() => sendResponse("accepted")}
+              onClick={handleAccept}
             >
-              {loading ? "Sending..." : "💖 Sorry Accept"}
+              💖 Sorry Accept
             </button>
 
             <button
               className="reject-btn"
               disabled={loading}
-              onClick={() => sendResponse("rejected")}
+              onClick={handleReject}
             >
               😢 Abhi Nahi
             </button>
           </div>
         </motion.div>
       )}
+
+      {/* 📩 POPUP */}
+      {popupOpen && (
+        <MessagePopup
+          message={popupMessage}
+          onClose={() => setPopupOpen(false)}
+        />
+      )}
+
     </div>
   );
 }
