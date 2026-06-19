@@ -8,7 +8,7 @@ function ApologyCard() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const correctPassword = "bhoomi123"; // 🔐 change this
+  const correctPassword = "bhoomi123";
 
   const handleUnlock = () => {
     if (password === correctPassword) {
@@ -19,16 +19,23 @@ function ApologyCard() {
     }
   };
 
-  const handleAccept = async () => {
+  const sendResponse = async (action) => {
     try {
       setLoading(true);
 
       await API.post("/response", {
-        action: "accepted",
-        message: "Bhoomi accepted apology ❤️",
+        action,
+        message:
+          action === "accepted"
+            ? "Bhoomi accepted apology ❤️"
+            : "Bhoomi rejected apology 😢",
       });
 
-      alert("Message sent successfully ❤️");
+      alert(
+        action === "accepted"
+          ? "❤️ Message Sent: Accepted"
+          : "😢 Message Sent: Not Accepted"
+      );
     } catch (err) {
       alert("Failed to send message");
     } finally {
@@ -66,29 +73,41 @@ function ApologyCard() {
         >
           <h2>🥺 Sorry yrr behan maaf krde please 🥺</h2>
 
-          <p>are yrr behan maine faltu hi uss din tujhe naraj kr diya sorry</p>
-
           <p>
-            ab yrr aise kregi kya tu bhai se naraj hogi naah naah mujhse naraj mt ho
-            chomu ab trko manane ke liye maine pehli baar fullstack project banaya 😂
+            are yrr behan maine faltu hi uss din tujhe naraj kr diya sorry
           </p>
 
           <p>
-            Please maaf kar de yrr sorry accept pr click kar aur mujhe jo gaali likhni
-            hai woh bhej de 😂
+            ab yrr aise kregi kya tu bhai se naraj hogi naah naah mujhse naraj mt ho
+            chomu 😂
+          </p>
+
+          <p>
+            maine pehli baar fullstack project banaya hai sirf tujhe manane ke liye 😭
           </p>
 
           <h4>your one & only chomu bhai ki trf se sorry</h4>
 
-          <button
-            onClick={handleAccept}
-            disabled={loading}
-          >
-            {loading ? "Sending..." : "💖 Sorry Accept"}
-          </button>
+          {/* 🔥 BUTTONS (NOW INSIDE MESSAGE) */}
+          <div className="button-group">
+            <button
+              className="accept-btn"
+              disabled={loading}
+              onClick={() => sendResponse("accepted")}
+            >
+              {loading ? "Sending..." : "💖 Sorry Accept"}
+            </button>
+
+            <button
+              className="reject-btn"
+              disabled={loading}
+              onClick={() => sendResponse("rejected")}
+            >
+              😢 Abhi Nahi
+            </button>
+          </div>
         </motion.div>
       )}
-
     </div>
   );
 }
